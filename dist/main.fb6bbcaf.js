@@ -189,13 +189,155 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"js/main.js":[function(require,module,exports) {
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"js/classes/Data.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var Data = /*#__PURE__*/function () {
+  function Data() {
+    _classCallCheck(this, Data);
+
+    this.data = {
+      initData: ''
+    };
+  }
+
+  _createClass(Data, [{
+    key: "processData",
+    value: function processData() {
+      if (this.data.initData.includes('.')) {
+        var splitData = this.data.initData.split('.');
+        this.data.decimal = true;
+        this.data.beforeDecimal = splitData[0];
+        this.data.afterDecimal = splitData[1];
+        this.formatData();
+      } else {
+        delete this.data.beforeDecimal;
+        delete this.data.afterDecimal;
+        this.data.decimal = false;
+        this.formatData();
+      }
+    }
+  }, {
+    key: "formatData",
+    value: function formatData() {
+      var data = !this.data.decimal ? this.data.initData : this.data.beforeDecimal;
+      var data2 = this.data.decimal ? ".".concat(this.data.afterDecimal) : '';
+      var formating = new Intl.NumberFormat().format(data) + data2;
+      this.data.formated = formating;
+    }
+  }, {
+    key: "clearAllData",
+    value: function clearAllData() {
+      this.data = {
+        initData: ''
+      };
+    }
+  }, {
+    key: "clearOneData",
+    value: function clearOneData() {
+      var arrData = this.data.initData.split('');
+      arrData.pop();
+      this.data.initData = arrData.join('');
+      this.processData();
+    }
+  }]);
+
+  return Data;
+}();
+
+var _default = new Data();
+
+exports.default = _default;
+},{}],"js/classes/UI.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var UI = /*#__PURE__*/function () {
+  function UI(mathInfoEl, resultEl) {
+    _classCallCheck(this, UI);
+
+    this.mathInfoEl = mathInfoEl;
+    this.resultEl = resultEl;
+  }
+
+  _createClass(UI, [{
+    key: "display",
+    value: function display(data) {
+      var bool = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (!bool) {
+        this.resultEl.textContent = data.formated ? data.formated : 0;
+      }
+    }
+  }]);
+
+  return UI;
+}();
+
+var _default = UI;
+exports.default = _default;
+},{}],"js/classes/Helper.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Helper = /*#__PURE__*/_createClass(function Helper() {
+  _classCallCheck(this, Helper);
+});
+
+var _default = new Helper();
+
+exports.default = _default;
+},{}],"js/main.js":[function(require,module,exports) {
 "use strict";
 
 require("./../scss/main.scss");
 
+var _Data = _interopRequireDefault(require("./classes/Data"));
+
+var _UI = _interopRequireDefault(require("./classes/UI"));
+
+var _Helper = _interopRequireDefault(require("./classes/Helper"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var operationsEl = document.querySelectorAll('.operation');
 var numsEl = document.querySelectorAll('.num');
+var mathInfoEl = document.getElementById('math-info');
+var resultEl = document.getElementById('result');
+var clearEl = document.getElementById('clear');
+var backspaceEl = document.getElementById('backspace');
+var uiCL = new _UI.default(mathInfoEl, resultEl);
 
 function operation(e) {
   var text = e.target.textContent.trim();
@@ -204,7 +346,29 @@ function operation(e) {
 
 function nums(e) {
   var text = e.target.textContent.trim();
-  text = !isNaN(text) ? Number(text) : text;
+  if (_Data.default.data.initData.includes('.') && text === '.') return;else {
+    if (_Data.default.data.initData.length >= 16) return;else {
+      _Data.default.data.initData += text;
+
+      _Data.default.processData();
+
+      console.log(_Data.default.data);
+    }
+  }
+  console.log(_Data.default.data);
+  uiCL.display(_Data.default.data, false);
+}
+
+function clearAll() {
+  _Data.default.clearAllData();
+
+  uiCL.display(_Data.default.data, false);
+}
+
+function clearOne() {
+  _Data.default.clearOneData();
+
+  uiCL.display(_Data.default.data, false);
 } ////////////////////////
 
 
@@ -214,7 +378,9 @@ operationsEl.forEach(function (el) {
 numsEl.forEach(function (el) {
   return el.addEventListener('click', nums);
 });
-},{"./../scss/main.scss":"scss/main.scss"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+clearEl.addEventListener('click', clearAll);
+backspaceEl.addEventListener('click', clearOne);
+},{"./../scss/main.scss":"scss/main.scss","./classes/Data":"js/classes/Data.js","./classes/UI":"js/classes/UI.js","./classes/Helper":"js/classes/Helper.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -242,7 +408,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "5680" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "12383" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
