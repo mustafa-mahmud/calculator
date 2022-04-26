@@ -1,13 +1,23 @@
 class UI {
-  constructor(mathInfoEl, resultEl) {
-    this.mathInfoEl = mathInfoEl;
-    this.resultEl = resultEl;
+  constructor() {
+    this.resultScreen = document.getElementById('result');
   }
 
-  display(data, bool = false) {
-    if (!bool) {
-      this.resultEl.textContent = data.formated ? data.formated : 0;
+  displayUI(data, show) {
+    if (show === 'math') {
     }
+
+    if (show === 'result') {
+      this.resultScreen.textContent = data;
+    }
+  }
+
+  addEventAll(els, handler) {
+    els.forEach((el) => el.addEventListener('click', handler));
+  }
+
+  addEventOne(el, handler) {
+    el.addEventListener('click', handler);
   }
 }
 

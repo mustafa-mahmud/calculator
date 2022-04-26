@@ -1,52 +1,58 @@
 import './../scss/main.scss';
-import Data from './classes/Data';
 import UI from './classes/UI';
+import Data from './classes/Data';
 import Helper from './classes/Helper';
+import { initData } from './config';
 
 const operationsEl = document.querySelectorAll('.operation');
 const numsEl = document.querySelectorAll('.num');
-const mathInfoEl = document.getElementById('math-info');
-const resultEl = document.getElementById('result');
+const calcEl = document.querySelector('.calculate');
+const resultScreen = document.getElementById('result');
 const clearEl = document.getElementById('clear');
 const backspaceEl = document.getElementById('backspace');
 
-const uiCL = new UI(mathInfoEl, resultEl);
+const uiCL = new UI();
 
-function operation(e) {
-  const text = e.target.textContent.trim();
-  console.log(text);
+function operationFunc() {
+  console.log(123);
 }
 
-function nums(e) {
-  const text = e.target.textContent.trim();
+function numsFunc(e) {
+  const target = e.target;
+  const text = target.textContent.trim();
 
-  if (Data.data.initData.includes('.') && text === '.') return;
-  else {
-    if (Data.data.initData.length >= 16) return;
-    else {
-      Data.data.initData += text;
-      Data.processData();
+  if (
+    (Data.allData.initNums.includes('.') && text === '.') ||
+    (Data.allData.initNums === '0' && text === '0')
+  )
+    return;
 
-      console.log(Data.data);
-    }
-  }
-
-  console.log(Data.data);
-  uiCL.display(Data.data, false);
+  Data.allData.initNums += text;
+  showFormatedData();
 }
 
-function clearAll() {
-  Data.clearAllData();
-  uiCL.display(Data.data, false);
+function showFormatedData() {
+  console.log(Data.allData.initNums);
+  const formatedData = Helper.formatResult(Data.allData.initNums);
+  uiCL.displayUI(formatedData, 'result');
 }
 
-function clearOne() {
-  Data.clearOneData();
-  uiCL.display(Data.data, false);
+function calcFunc() {
+  //todo:: it will be active when = button are clicked
 }
 
-////////////////////////
-operationsEl.forEach((el) => el.addEventListener('click', operation));
-numsEl.forEach((el) => el.addEventListener('click', nums));
-clearEl.addEventListener('click', clearAll);
-backspaceEl.addEventListener('click', clearOne);
+function clearScreen() {
+  Data.initData();
+  resultScreen.textContent = '0';
+}
+
+function clearLastOne() {
+  Data.clearLastOneData();
+  showFormatedData();
+}
+
+uiCL.addEventAll(operationsEl, operationFunc);
+uiCL.addEventAll(numsEl, numsFunc);
+uiCL.addEventOne(calcEl, calcFunc);
+uiCL.addEventOne(clearEl, clearScreen);
+uiCL.addEventOne(backspaceEl, clearLastOne);

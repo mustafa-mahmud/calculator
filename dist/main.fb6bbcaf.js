@@ -189,77 +189,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"js/classes/Data.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-var Data = /*#__PURE__*/function () {
-  function Data() {
-    _classCallCheck(this, Data);
-
-    this.data = {
-      initData: ''
-    };
-  }
-
-  _createClass(Data, [{
-    key: "processData",
-    value: function processData() {
-      if (this.data.initData.includes('.')) {
-        var splitData = this.data.initData.split('.');
-        this.data.decimal = true;
-        this.data.beforeDecimal = splitData[0];
-        this.data.afterDecimal = splitData[1];
-        this.formatData();
-      } else {
-        delete this.data.beforeDecimal;
-        delete this.data.afterDecimal;
-        this.data.decimal = false;
-        this.formatData();
-      }
-    }
-  }, {
-    key: "formatData",
-    value: function formatData() {
-      var data = !this.data.decimal ? this.data.initData : this.data.beforeDecimal;
-      var data2 = this.data.decimal ? ".".concat(this.data.afterDecimal) : '';
-      var formating = new Intl.NumberFormat().format(data) + data2;
-      this.data.formated = formating;
-    }
-  }, {
-    key: "clearAllData",
-    value: function clearAllData() {
-      this.data = {
-        initData: ''
-      };
-    }
-  }, {
-    key: "clearOneData",
-    value: function clearOneData() {
-      var arrData = this.data.initData.split('');
-      arrData.pop();
-      this.data.initData = arrData.join('');
-      this.processData();
-    }
-  }]);
-
-  return Data;
-}();
-
-var _default = new Data();
-
-exports.default = _default;
-},{}],"js/classes/UI.js":[function(require,module,exports) {
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"js/classes/UI.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -274,21 +204,32 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 var UI = /*#__PURE__*/function () {
-  function UI(mathInfoEl, resultEl) {
+  function UI() {
     _classCallCheck(this, UI);
 
-    this.mathInfoEl = mathInfoEl;
-    this.resultEl = resultEl;
+    this.resultScreen = document.getElementById('result');
   }
 
   _createClass(UI, [{
-    key: "display",
-    value: function display(data) {
-      var bool = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    key: "displayUI",
+    value: function displayUI(data, show) {
+      if (show === 'math') {}
 
-      if (!bool) {
-        this.resultEl.textContent = data.formated ? data.formated : 0;
+      if (show === 'result') {
+        this.resultScreen.textContent = data;
       }
+    }
+  }, {
+    key: "addEventAll",
+    value: function addEventAll(els, handler) {
+      els.forEach(function (el) {
+        return el.addEventListener('click', handler);
+      });
+    }
+  }, {
+    key: "addEventOne",
+    value: function addEventOne(el, handler) {
+      el.addEventListener('click', handler);
     }
   }]);
 
@@ -297,7 +238,19 @@ var UI = /*#__PURE__*/function () {
 
 var _default = UI;
 exports.default = _default;
-},{}],"js/classes/Helper.js":[function(require,module,exports) {
+},{}],"js/config.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.initData = void 0;
+var initData = {
+  decActive: false,
+  initNums: ''
+};
+exports.initData = initData;
+},{}],"js/classes/Data.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -305,82 +258,354 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _config = require("./../config");
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var Data = /*#__PURE__*/function () {
+  function Data() {
+    _classCallCheck(this, Data);
 
-var Helper = /*#__PURE__*/_createClass(function Helper() {
-  _classCallCheck(this, Helper);
-});
+    this.allData = null;
+    this.initData();
+  }
 
-var _default = new Helper();
+  _createClass(Data, [{
+    key: "initData",
+    value: function initData() {
+      this.allData = _objectSpread({}, _config.initData);
+    }
+  }, {
+    key: "clearLastOneData",
+    value: function clearLastOneData() {
+      var makeArr = this.allData.initNums.split('');
+      makeArr.pop();
+      this.allData.initNums = makeArr.join('');
+    }
+  }]);
+
+  return Data;
+}();
+
+var _default = new Data();
 
 exports.default = _default;
-},{}],"js/main.js":[function(require,module,exports) {
+},{"./../config":"js/config.js"}],"node_modules/process/browser.js":[function(require,module,exports) {
+
+// shim for using process in browser
+var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+  throw new Error('setTimeout has not been defined');
+}
+
+function defaultClearTimeout() {
+  throw new Error('clearTimeout has not been defined');
+}
+
+(function () {
+  try {
+    if (typeof setTimeout === 'function') {
+      cachedSetTimeout = setTimeout;
+    } else {
+      cachedSetTimeout = defaultSetTimout;
+    }
+  } catch (e) {
+    cachedSetTimeout = defaultSetTimout;
+  }
+
+  try {
+    if (typeof clearTimeout === 'function') {
+      cachedClearTimeout = clearTimeout;
+    } else {
+      cachedClearTimeout = defaultClearTimeout;
+    }
+  } catch (e) {
+    cachedClearTimeout = defaultClearTimeout;
+  }
+})();
+
+function runTimeout(fun) {
+  if (cachedSetTimeout === setTimeout) {
+    //normal enviroments in sane situations
+    return setTimeout(fun, 0);
+  } // if setTimeout wasn't available but was latter defined
+
+
+  if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+    cachedSetTimeout = setTimeout;
+    return setTimeout(fun, 0);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedSetTimeout(fun, 0);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+      return cachedSetTimeout.call(null, fun, 0);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+      return cachedSetTimeout.call(this, fun, 0);
+    }
+  }
+}
+
+function runClearTimeout(marker) {
+  if (cachedClearTimeout === clearTimeout) {
+    //normal enviroments in sane situations
+    return clearTimeout(marker);
+  } // if clearTimeout wasn't available but was latter defined
+
+
+  if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+    cachedClearTimeout = clearTimeout;
+    return clearTimeout(marker);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedClearTimeout(marker);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+      return cachedClearTimeout.call(null, marker);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+      // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+      return cachedClearTimeout.call(this, marker);
+    }
+  }
+}
+
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+  if (!draining || !currentQueue) {
+    return;
+  }
+
+  draining = false;
+
+  if (currentQueue.length) {
+    queue = currentQueue.concat(queue);
+  } else {
+    queueIndex = -1;
+  }
+
+  if (queue.length) {
+    drainQueue();
+  }
+}
+
+function drainQueue() {
+  if (draining) {
+    return;
+  }
+
+  var timeout = runTimeout(cleanUpNextTick);
+  draining = true;
+  var len = queue.length;
+
+  while (len) {
+    currentQueue = queue;
+    queue = [];
+
+    while (++queueIndex < len) {
+      if (currentQueue) {
+        currentQueue[queueIndex].run();
+      }
+    }
+
+    queueIndex = -1;
+    len = queue.length;
+  }
+
+  currentQueue = null;
+  draining = false;
+  runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+  var args = new Array(arguments.length - 1);
+
+  if (arguments.length > 1) {
+    for (var i = 1; i < arguments.length; i++) {
+      args[i - 1] = arguments[i];
+    }
+  }
+
+  queue.push(new Item(fun, args));
+
+  if (queue.length === 1 && !draining) {
+    runTimeout(drainQueue);
+  }
+}; // v8 likes predictible objects
+
+
+function Item(fun, array) {
+  this.fun = fun;
+  this.array = array;
+}
+
+Item.prototype.run = function () {
+  this.fun.apply(null, this.array);
+};
+
+process.title = 'browser';
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) {
+  return [];
+};
+
+process.binding = function (name) {
+  throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () {
+  return '/';
+};
+
+process.chdir = function (dir) {
+  throw new Error('process.chdir is not supported');
+};
+
+process.umask = function () {
+  return 0;
+};
+},{}],"js/classes/Helper.js":[function(require,module,exports) {
+var process = require("process");
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var Helper = /*#__PURE__*/function () {
+  function Helper() {
+    _classCallCheck(this, Helper);
+  }
+
+  _createClass(Helper, null, [{
+    key: "formatResult",
+    value: function formatResult(data) {
+      var process = data.split('.');
+      return new Intl.NumberFormat().format(process[0]) + "".concat(process.length === 2 ? '.' + process[1] : '');
+    }
+  }]);
+
+  return Helper;
+}();
+
+var _default = Helper;
+exports.default = _default;
+},{"process":"node_modules/process/browser.js"}],"js/main.js":[function(require,module,exports) {
 "use strict";
 
 require("./../scss/main.scss");
 
-var _Data = _interopRequireDefault(require("./classes/Data"));
-
 var _UI = _interopRequireDefault(require("./classes/UI"));
 
+var _Data = _interopRequireDefault(require("./classes/Data"));
+
 var _Helper = _interopRequireDefault(require("./classes/Helper"));
+
+var _config = require("./config");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var operationsEl = document.querySelectorAll('.operation');
 var numsEl = document.querySelectorAll('.num');
-var mathInfoEl = document.getElementById('math-info');
-var resultEl = document.getElementById('result');
+var calcEl = document.querySelector('.calculate');
+var resultScreen = document.getElementById('result');
 var clearEl = document.getElementById('clear');
 var backspaceEl = document.getElementById('backspace');
-var uiCL = new _UI.default(mathInfoEl, resultEl);
+var uiCL = new _UI.default();
 
-function operation(e) {
-  var text = e.target.textContent.trim();
-  console.log(text);
+function operationFunc() {
+  console.log(123);
 }
 
-function nums(e) {
-  var text = e.target.textContent.trim();
-  if (_Data.default.data.initData.includes('.') && text === '.') return;else {
-    if (_Data.default.data.initData.length >= 16) return;else {
-      _Data.default.data.initData += text;
-
-      _Data.default.processData();
-
-      console.log(_Data.default.data);
-    }
-  }
-  console.log(_Data.default.data);
-  uiCL.display(_Data.default.data, false);
+function numsFunc(e) {
+  var target = e.target;
+  var text = target.textContent.trim();
+  if (_Data.default.allData.initNums.includes('.') && text === '.' || _Data.default.allData.initNums === '0' && text === '0') return;
+  _Data.default.allData.initNums += text;
+  showFormatedData();
 }
 
-function clearAll() {
-  _Data.default.clearAllData();
+function showFormatedData() {
+  console.log(_Data.default.allData.initNums);
 
-  uiCL.display(_Data.default.data, false);
+  var formatedData = _Helper.default.formatResult(_Data.default.allData.initNums);
+
+  uiCL.displayUI(formatedData, 'result');
 }
 
-function clearOne() {
-  _Data.default.clearOneData();
+function calcFunc() {//todo:: it will be active when = button are clicked
+}
 
-  uiCL.display(_Data.default.data, false);
-} ////////////////////////
+function clearScreen() {
+  _Data.default.initData();
 
+  resultScreen.textContent = '0';
+}
 
-operationsEl.forEach(function (el) {
-  return el.addEventListener('click', operation);
-});
-numsEl.forEach(function (el) {
-  return el.addEventListener('click', nums);
-});
-clearEl.addEventListener('click', clearAll);
-backspaceEl.addEventListener('click', clearOne);
-},{"./../scss/main.scss":"scss/main.scss","./classes/Data":"js/classes/Data.js","./classes/UI":"js/classes/UI.js","./classes/Helper":"js/classes/Helper.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+function clearLastOne() {
+  _Data.default.clearLastOneData();
+
+  showFormatedData();
+}
+
+uiCL.addEventAll(operationsEl, operationFunc);
+uiCL.addEventAll(numsEl, numsFunc);
+uiCL.addEventOne(calcEl, calcFunc);
+uiCL.addEventOne(clearEl, clearScreen);
+uiCL.addEventOne(backspaceEl, clearLastOne);
+},{"./../scss/main.scss":"scss/main.scss","./classes/UI":"js/classes/UI.js","./classes/Data":"js/classes/Data.js","./classes/Helper":"js/classes/Helper.js","./config":"js/config.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -408,7 +633,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "12383" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "12477" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
