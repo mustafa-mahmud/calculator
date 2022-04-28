@@ -2,13 +2,13 @@ import { initData } from './../config';
 
 class Data {
   constructor() {
-    this.allData = null;
+    this.allData = { initNums: '', nums: [], sign: null };
 
     this.initData();
   }
 
   initData() {
-    this.allData = { ...initData };
+    this.allData = { ...initData, nums: [...initData.nums] };
   }
 
   clearLastOneData() {

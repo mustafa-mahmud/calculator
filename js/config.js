@@ -1,4 +1,5 @@
 export const initData = {
-  decActive: false,
   initNums: '',
+  nums: [],
+  sign: null,
 };

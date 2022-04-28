@@ -189,118 +189,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"js/classes/UI.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-var UI = /*#__PURE__*/function () {
-  function UI() {
-    _classCallCheck(this, UI);
-
-    this.resultScreen = document.getElementById('result');
-  }
-
-  _createClass(UI, [{
-    key: "displayUI",
-    value: function displayUI(data, show) {
-      if (show === 'math') {}
-
-      if (show === 'result') {
-        this.resultScreen.textContent = data;
-      }
-    }
-  }, {
-    key: "addEventAll",
-    value: function addEventAll(els, handler) {
-      els.forEach(function (el) {
-        return el.addEventListener('click', handler);
-      });
-    }
-  }, {
-    key: "addEventOne",
-    value: function addEventOne(el, handler) {
-      el.addEventListener('click', handler);
-    }
-  }]);
-
-  return UI;
-}();
-
-var _default = UI;
-exports.default = _default;
-},{}],"js/config.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.initData = void 0;
-var initData = {
-  decActive: false,
-  initNums: ''
-};
-exports.initData = initData;
-},{}],"js/classes/Data.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _config = require("./../config");
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-var Data = /*#__PURE__*/function () {
-  function Data() {
-    _classCallCheck(this, Data);
-
-    this.allData = null;
-    this.initData();
-  }
-
-  _createClass(Data, [{
-    key: "initData",
-    value: function initData() {
-      this.allData = _objectSpread({}, _config.initData);
-    }
-  }, {
-    key: "clearLastOneData",
-    value: function clearLastOneData() {
-      var makeArr = this.allData.initNums.split('');
-      makeArr.pop();
-      this.allData.initNums = makeArr.join('');
-    }
-  }]);
-
-  return Data;
-}();
-
-var _default = new Data();
-
-exports.default = _default;
-},{"./../config":"js/config.js"}],"node_modules/process/browser.js":[function(require,module,exports) {
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/process/browser.js":[function(require,module,exports) {
 
 // shim for using process in browser
 var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
@@ -532,7 +421,7 @@ var Helper = /*#__PURE__*/function () {
   _createClass(Helper, null, [{
     key: "formatResult",
     value: function formatResult(data) {
-      var process = data.split('.');
+      var process = String(data).split('.');
       return new Intl.NumberFormat().format(process[0]) + "".concat(process.length === 2 ? '.' + process[1] : '');
     }
   }]);
@@ -542,7 +431,218 @@ var Helper = /*#__PURE__*/function () {
 
 var _default = Helper;
 exports.default = _default;
-},{"process":"node_modules/process/browser.js"}],"js/main.js":[function(require,module,exports) {
+},{"process":"node_modules/process/browser.js"}],"js/classes/UI.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _Helper = _interopRequireDefault(require("./Helper"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var UI = /*#__PURE__*/function () {
+  function UI() {
+    _classCallCheck(this, UI);
+
+    this.resultScreen = document.getElementById('result');
+    this.mathInfoScreen = document.getElementById('math-info');
+  }
+
+  _createClass(UI, [{
+    key: "displayInitNums",
+    value: function displayInitNums(data) {
+      var formatedData = _Helper.default.formatResult(data);
+
+      this.resultScreen.textContent = formatedData;
+    }
+  }, {
+    key: "displayPrepareMath",
+    value: function displayPrepareMath(data, sign) {
+      this.mathInfoScreen.innerHTML = "".concat(data.length ? data : '0', "<span id=\"sign\">").concat(sign, "</span>");
+    }
+  }, {
+    key: "displayResult",
+    value: function displayResult(data, sign) {
+      this.mathInfoScreen.innerHTML = "".concat(data, "<span id=\"sign\">").concat(sign, "</span>");
+
+      var formatedData = _Helper.default.formatResult(data);
+
+      this.resultScreen.textContent = formatedData;
+    }
+  }, {
+    key: "displayCalcResult",
+    value: function displayCalcResult(num1, num2, data, sign) {
+      this.mathInfoScreen.innerHTML = "".concat(num1, "<span id=\"sign\">").concat(sign).concat(num2, "=</span>");
+
+      var formatedData = _Helper.default.formatResult(data);
+
+      this.resultScreen.textContent = formatedData;
+    }
+  }, {
+    key: "addEventAll",
+    value: function addEventAll(els, handler) {
+      els.forEach(function (el) {
+        return el.addEventListener('click', handler);
+      });
+    }
+  }, {
+    key: "addEventOne",
+    value: function addEventOne(el, handler) {
+      el.addEventListener('click', handler);
+    }
+  }]);
+
+  return UI;
+}();
+
+var _default = UI;
+exports.default = _default;
+},{"./Helper":"js/classes/Helper.js"}],"js/config.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.initData = void 0;
+var initData = {
+  initNums: '',
+  nums: [],
+  sign: null
+};
+exports.initData = initData;
+},{}],"js/classes/Data.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _config = require("./../config");
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var Data = /*#__PURE__*/function () {
+  function Data() {
+    _classCallCheck(this, Data);
+
+    this.allData = {
+      initNums: '',
+      nums: [],
+      sign: null
+    };
+    this.initData();
+  }
+
+  _createClass(Data, [{
+    key: "initData",
+    value: function initData() {
+      this.allData = _objectSpread(_objectSpread({}, _config.initData), {}, {
+        nums: _toConsumableArray(_config.initData.nums)
+      });
+    }
+  }, {
+    key: "clearLastOneData",
+    value: function clearLastOneData() {
+      var makeArr = this.allData.initNums.split('');
+      makeArr.pop();
+      this.allData.initNums = makeArr.join('');
+    }
+  }]);
+
+  return Data;
+}();
+
+var _default = new Data();
+
+exports.default = _default;
+},{"./../config":"js/config.js"}],"js/classes/DoSum.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var DoSum = /*#__PURE__*/function () {
+  function DoSum() {
+    _classCallCheck(this, DoSum);
+  }
+
+  _createClass(DoSum, null, [{
+    key: "whichSum",
+    value: function whichSum(num1, num2, sign) {
+      // debugger;
+      if (sign === '+') return DoSum.add(num1, num2);
+      if (sign === '-') return DoSum.sub(num1, num2);
+      if (sign === 'x') return DoSum.mul(num1, num2);
+      if (sign === '/') return DoSum.div(num1, num2);
+    }
+  }, {
+    key: "add",
+    value: function add(num1, num2) {
+      return num1 + num2;
+    }
+  }, {
+    key: "sub",
+    value: function sub(num1, num2) {
+      return num1 - num2;
+    }
+  }, {
+    key: "mul",
+    value: function mul(num1, num2) {
+      return num1 * num2;
+    }
+  }, {
+    key: "div",
+    value: function div(num1, num2) {
+      return num1 / num2;
+    }
+  }]);
+
+  return DoSum;
+}();
+
+var _default = DoSum;
+exports.default = _default;
+},{}],"js/main.js":[function(require,module,exports) {
 "use strict";
 
 require("./../scss/main.scss");
@@ -553,7 +653,7 @@ var _Data = _interopRequireDefault(require("./classes/Data"));
 
 var _Helper = _interopRequireDefault(require("./classes/Helper"));
 
-var _config = require("./config");
+var _DoSum = _interopRequireDefault(require("./classes/DoSum"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -563,41 +663,98 @@ var calcEl = document.querySelector('.calculate');
 var resultScreen = document.getElementById('result');
 var clearEl = document.getElementById('clear');
 var backspaceEl = document.getElementById('backspace');
+var mathInfoEl = document.getElementById('math-info');
 var uiCL = new _UI.default();
 
-function operationFunc() {
-  console.log(123);
+function operationFunc(e) {
+  var target = e.target;
+  var text = target.textContent.trim();
+  var signText = document.getElementById('sign').textContent;
+  target.style.pointerEvents = 'none';
+  uiCL.displayPrepareMath(_Data.default.allData.initNums || _Data.default.allData.nums[0], text); //(||) search true
+
+  if (_Data.default.allData.initNums.length) _Data.default.allData.nums.push(_Data.default.allData.initNums);
+
+  if (!_Data.default.allData.sign) {
+    _Data.default.allData.sign = text;
+  } else if (signText && signText !== text && !/=/.test(signText)) {
+    _Data.default.allData.sign = signText;
+  } else {
+    _Data.default.allData.sign = text;
+  }
+
+  _Data.default.allData.initNums = '';
+
+  if (_Data.default.allData.nums.length === 2) {
+    target.style.pointerEvents = 'auto';
+    var nums = _Data.default.allData.nums;
+    var sign = _Data.default.allData.sign;
+
+    var result = _DoSum.default.whichSum(+nums[0], +nums[1], sign);
+
+    _Data.default.allData.nums = [String(result)];
+    _Data.default.allData.sign = null;
+    uiCL.displayResult(result, text);
+    _Data.default.allData.sign = text;
+  }
+}
+
+function calcFunc() {
+  var signText = document.getElementById('sign').textContent;
+
+  if (/=/.test(signText)) {
+    var num1 = +_Data.default.allData.nums[0];
+    var num2 = +String(parseFloat(signText.replaceAll(/[/=+x-]/g, '')));
+    var sign = signText.split('').find(function (el) {
+      return el === '+' || el === '-' || el === 'x' || el === '/';
+    });
+
+    var data = _DoSum.default.whichSum(num1, num2, sign);
+
+    uiCL.displayCalcResult(num1, num2, data, sign);
+    _Data.default.allData.sign = null;
+    _Data.default.allData.nums = [String(data)];
+    _Data.default.allData.initNums = '';
+  } else {
+    var _num = +_Data.default.allData.nums[0];
+
+    var _num2 = +_Data.default.allData.initNums;
+
+    var _sign = _Data.default.allData.sign;
+
+    var _data = _DoSum.default.whichSum(_num, _num2, _sign);
+
+    uiCL.displayCalcResult(_num, _num2, _data, _sign);
+    _Data.default.allData.sign = null;
+    _Data.default.allData.nums = [String(_data)];
+    _Data.default.allData.initNums = '';
+  }
 }
 
 function numsFunc(e) {
   var target = e.target;
   var text = target.textContent.trim();
+  operationsEl.forEach(function (el) {
+    return el.style.pointerEvents = 'auto';
+  });
   if (_Data.default.allData.initNums.includes('.') && text === '.' || _Data.default.allData.initNums === '0' && text === '0') return;
   _Data.default.allData.initNums += text;
-  showFormatedData();
-}
-
-function showFormatedData() {
-  console.log(_Data.default.allData.initNums);
-
-  var formatedData = _Helper.default.formatResult(_Data.default.allData.initNums);
-
-  uiCL.displayUI(formatedData, 'result');
-}
-
-function calcFunc() {//todo:: it will be active when = button are clicked
+  uiCL.displayInitNums(_Data.default.allData.initNums);
 }
 
 function clearScreen() {
   _Data.default.initData();
 
   resultScreen.textContent = '0';
+  mathInfoEl.innerHTML = "<span id=\"sign\"></span>";
 }
 
 function clearLastOne() {
+  if (!_Data.default.allData.initNums) return;
+
   _Data.default.clearLastOneData();
 
-  showFormatedData();
+  uiCL.displayInitNums(_Data.default.allData.initNums);
 }
 
 uiCL.addEventAll(operationsEl, operationFunc);
@@ -605,7 +762,7 @@ uiCL.addEventAll(numsEl, numsFunc);
 uiCL.addEventOne(calcEl, calcFunc);
 uiCL.addEventOne(clearEl, clearScreen);
 uiCL.addEventOne(backspaceEl, clearLastOne);
-},{"./../scss/main.scss":"scss/main.scss","./classes/UI":"js/classes/UI.js","./classes/Data":"js/classes/Data.js","./classes/Helper":"js/classes/Helper.js","./config":"js/config.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../scss/main.scss":"scss/main.scss","./classes/UI":"js/classes/UI.js","./classes/Data":"js/classes/Data.js","./classes/Helper":"js/classes/Helper.js","./classes/DoSum":"js/classes/DoSum.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -633,7 +790,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "12477" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8871" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
