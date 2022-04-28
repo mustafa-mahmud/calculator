@@ -32,6 +32,7 @@ function operationFunc(e) {
   } else {
     Data.allData.sign = text;
   }
+
   Data.allData.initNums = '';
 
   if (Data.allData.nums.length === 2) {
